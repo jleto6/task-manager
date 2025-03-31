@@ -1,0 +1,85 @@
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap');
+
+
+html, body {
+    font-family: 'IBM Plex Mono', monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #333;
+    margin: 0; /* Remove default margins */
+    padding: 0; /* Remove default padding */
+}
+
+h1 {
+    text-align: left;
+    color: #4a4a4a;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.sticky-note {
+    background-color: #ffeb3b;
+    border-radius: 0px; /* No rounded corners */
+    width: 350px;
+    height: 350px; /* Set the height of the sticky note */
+    padding: 15px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1); 
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    justify-content: flex-start; /* Keep elements at the top */
+    align-items: stretch; /* Ensure children fill the container's width */
+}
+
+
+textarea {
+    padding: 10px;
+    font-size: 1rem;
+    width: 100%;
+    height: 315px;
+    box-sizing: border-box;
+    background-color: transparent;
+    color: #333;
+    border: none;
+    resize: none;
+    white-space: normal;
+    overflow-y: auto;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+textarea::placeholder {
+    color: #bbb;
+    text-align: left;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+button {
+    background-color: lightgray; /* Same yellow for the button */
+    color: black;
+    font-family: 'IBM Plex Mono', monospace;
+    border: none;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1); 
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+button:hover {
+    background-color: gray; /* Darker shade on hover */
+}
+
+.task-container {
+    justify-content: center; /* Ensure the sticky notes are centered within the container */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-top: 20px;
+}
