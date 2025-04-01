@@ -50,10 +50,22 @@ document.addEventListener('DOMContentLoaded', () => {
         p.textContent = task.description || "No description provided."; // Fill th text
         note.appendChild(p); // Nest p inside of the note div
 
+        // Buttons
+        const btnContainer = document.createElement('div'); // Create the button container
+        btnContainer.classList.add('btn-container'); // add the btn-container class to it
+
         const b = document.createElement('button') // Create a <button> element for deleting
         b.classList.add('delete-btn'); // add the delete class
-        b.textContent = "Delete"; // Fill th text
-        note.appendChild(b); // Nest b inside of the note div
+        b.textContent = "🗑️"; // Fill th text
+        btnContainer.appendChild(b) // append it to the container class
+
+        const s = document.createElement('button') // Create a <button> element for starting task
+        s.classList.add('start-btn'); // add the start class
+        s.classList.add('green'); // green class
+        s.textContent = "Start"; // Fill the text
+        btnContainer.appendChild(s); // append it to the container class
+
+        note.appendChild(btnContainer) // append button container to the note
 
         // Event listener for dynamically created buttons
         b.addEventListener('click', () => {
@@ -69,10 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        type: "delete",
+                        type: "begin",
                         id: taskId
                     })
                 });
+        })
+
+        s.addEventListener('click', () => {
 
         })
 
@@ -113,13 +128,23 @@ document.addEventListener('DOMContentLoaded', () => {
     <!-- Task Manager Title -->
     <h1>Task Manager</h1>
 
+
     <!-- Dynamically Generated Sticky Notes (Tasks) -->
     <div class="task-container">
 
          {% for task in tasks %}
          <div class="sticky-note" data-id="{{ task[0]}}">
             <p>{{ task[1] or 'No description provided.' }}</p>
-            <button type="button" class="delete-btn" data-id="{{ task[0]}}">Delete</button>
+            
+            <div class="btn-container">
+                <button type="button" class="delete-btn" data-id="{{ task[0]}}">
+                    <!-- <img src="static/trash.png" alt="Save" style="width: 30px; height: 30px;"> -->
+                    🗑️
+                </button>
+
+                <button type="button" class="green" data-id="{{ task[0]}}">Start</button>
+            </div>
+
         </div>
         {% endfor %}
          
