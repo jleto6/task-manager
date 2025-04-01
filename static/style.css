@@ -20,7 +20,7 @@ h1 {
 }
 
 .sticky-note {
-    background-color: #ffeb3b;
+    background-color: #FFEB80;
     border-radius: 0px; /* No rounded corners */
     width: 350px;
     height: 350px; /* Set the height of the sticky note */
@@ -33,7 +33,6 @@ h1 {
     justify-content: flex-start; /* Keep elements at the top */
     align-items: stretch; /* Ensure children fill the container's width */
 }
-
 
 textarea {
     padding: 10px;
@@ -60,7 +59,7 @@ textarea:focus {
 }
 
 button {
-    background-color: lightgray; /* Same yellow for the button */
+    background-color: lightgray;
     color: black;
     font-family: 'IBM Plex Mono', monospace;
     border: none;
@@ -72,11 +71,11 @@ button {
 }
 
 button:hover {
-    background-color: gray; /* Darker shade on hover */
+    background-color: gray; 
 }
 
 .task-container {
-    justify-content: center; /* Ensure the sticky notes are centered within the container */
+    justify-content: center; 
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
