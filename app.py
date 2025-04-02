@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
-
 import psycopg2
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "dev"  # Set a secret key for session
@@ -32,11 +32,11 @@ def home():
             if text:
                 # Insert task into DB
                 cur.execute("INSERT INTO tasks (description) VALUES (%s) RETURNING id;", (text,))
-                task_id = cur.fetchone()[0]
+                id = cur.fetchone()[0]
                 conn.commit()
                 # Emit the task so the frontend can update
                 socketio.emit("task", {
-                    "id": task_id,
+                    "id": id,
                     "description": text
                 })
 
@@ -47,6 +47,19 @@ def home():
                 # Delete task with the id
                 cur.execute("DELETE FROM tasks WHERE id = %s", (id,))
                 conn.commit()
+
+        elif action_type == "begin":
+            id = data.get("id")
+            if id:
+                # Update the started column with current time
+                time = datetime.now()
+                cur.execute("UPDATE tasks SET start_time = %s WHERE id = %s", (time, id))
+                conn.commit()
+                # Emit the time
+                socketio.emit("time", {
+                    "id": id,
+                    "time": time.isoformat()
+                })
 
         return "", 204  # success, no content
 

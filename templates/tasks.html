@@ -3,98 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager - Sticky Notes</title>
+    <title>Task Manager</title>
     <link rel="stylesheet" href="static/style.css">
 </head>
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-<script>
-var socket = io(); // Connect to Flask-SocketIO Server
 
+<!-- Dynamically Created Buttons -->
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+
+<!-- Static Buttons -->
+<script>
 document.addEventListener('DOMContentLoaded', () => {
 
-    // SEND TO BACKEND
-    const text = document.querySelector('#text')
-    document.querySelector('#save').addEventListener('click', () => {
-        if (text.value.trim() !== "") {
-            // Send text to backend
-                fetch("/", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        type: "text",
-                        text: text.value
-                    })
-                });
-                text.value = "" // Clear the form
-        }
-        else {
-            alert("Text required");
-    }})
-
-    // SHOW FROM EMIT
-    socket.on("task", (data) => {
-        const taskContainer = document.querySelector('.task-container');
-        const formContainer = document.querySelector('.form-container');
-
-        const task = data;  // Grab the task from the emit
-
-        const note = document.createElement('div'); // Create a note element
-        note.classList.add('sticky-note'); // add CSS class 'sticky-note' to it
-
-        note.dataset.id = task.id; // Store the task ID in a data attribute
-
-        const p = document.createElement('p'); // Create a <p> element to hold the text
-        p.textContent = task.description || "No description provided."; // Fill th text
-        note.appendChild(p); // Nest p inside of the note div
-
-        // Buttons
-        const btnContainer = document.createElement('div'); // Create the button container
-        btnContainer.classList.add('btn-container'); // add the btn-container class to it
-
-        const b = document.createElement('button') // Create a <button> element for deleting
-        b.classList.add('delete-btn'); // add the delete class
-        b.textContent = "🗑️"; // Fill th text
-        btnContainer.appendChild(b) // append it to the container class
-
-        const s = document.createElement('button') // Create a <button> element for starting task
-        s.classList.add('start-btn'); // add the start class
-        s.classList.add('green'); // green class
-        s.textContent = "Start"; // Fill the text
-        btnContainer.appendChild(s); // append it to the container class
-
-        note.appendChild(btnContainer) // append button container to the note
-
-        // Event listener for dynamically created buttons
-        b.addEventListener('click', () => {
-            const taskId = note.dataset.id; // Get the id from the created task
-            //console.log("deleting task with id:", taskId)
-            const currentTask = document.querySelector(`.sticky-note[data-id="${taskId}"]`) // get the task based on current ID\
-            if (currentTask) currentTask.remove() // remove the task from js if it exists
-
-            // Send id to backend to be deleted
-            fetch("/", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        type: "begin",
-                        id: taskId
-                    })
-                });
-        })
-
-        s.addEventListener('click', () => {
-
-        })
-
-        taskContainer.insertBefore(note, formContainer);  // Insert the new task before the formContainer
-    });
-
-    // DELETE BUTTON FOR STATIC
+    // Delete Button
     const deleteButton = document.querySelectorAll('.delete-btn');
     deleteButton.forEach(button => {
         button.addEventListener('click', () => { 
@@ -114,11 +36,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         id: taskId
                     })
                 });
+        })})
 
-        })
-
-    })
-
+    // Begin Button
+    const beginButton = document.querySelectorAll('.begin-btn');
+    beginButton.forEach(button => {
+        button.addEventListener('click', () => { 
+            const taskId = button.dataset.id; // Get the id from the button
+            // Send id to backend to be deleted
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    type: "begin",
+                    id: taskId
+                })
+            });
+        })})
 });
 
 </script>
@@ -142,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     🗑️
                 </button>
 
-                <button type="button" class="green" data-id="{{ task[0]}}">Start</button>
+                <button type="button" class="begin-btn" data-id="{{ task[0]}}">Start</button>
             </div>
 
         </div>

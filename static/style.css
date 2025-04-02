@@ -69,10 +69,9 @@ textarea:focus {
   }
 
 button {
-    --tint-start: rgba(128, 128, 128, 0.2); /* Default: gray tint */
-    --tint-end: rgba(255, 255, 255, 0.05);
+    --color: rgba(128, 128, 128, 0.2); /* Default: gray tint */
 
-    background: linear-gradient(135deg, var(--tint-start), var(--tint-end));
+    background: var(--color);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
 
@@ -91,13 +90,12 @@ button:hover {
     background-color: lightgray; 
 }
 
-.green {
-    --tint-start: rgba(80, 220, 100, 0.5); 
-    --tint-end: rgba(80, 220, 100, 0.3);
+.begin-btn {
+    --color: rgba(80, 220, 100, 0.5); 
     padding: 5px 50px; /* top/bottom and left/right padding */
     margin-left: 10px;
   }
-.green:hover {
+.begin-btn:hover {
     background-color: lightgreen;
 }
 
