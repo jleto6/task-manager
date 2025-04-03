@@ -1,3 +1,5 @@
+import { updateTimer } from './helpers.js';
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // SEND TO BACKEND ON SAVE
@@ -22,12 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }})
 
     // CHECK FOR TIMERS
-    function updateTimer(start){
-        const diffMs = new Date() - start;
-        const diffSec = Math.floor(diffMs/1000)
-        // console.log(diffSec)
-        return diffSec;
-    }
 
     // Go through notes other than the form
     document.querySelectorAll('.sticky-note:not(.form-container)').forEach(note => { 

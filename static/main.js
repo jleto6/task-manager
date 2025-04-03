@@ -1,5 +1,8 @@
 
+// @ts-nocheck
 var socket = io(); // Connect to Flask-SocketIO Server
+
+import { updateTimer } from './helpers.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -91,12 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // TIMER 
-    function updateTimer(start){
-        const diffMs = new Date() - start;
-        const diffSec = Math.floor(diffMs/1000)
-        // console.log(diffSec)
-        return diffSec;
-    }
+    
     // on emit
     socket.on("time", (data) => {
         const start = new Date(data.time)
