@@ -16,6 +16,62 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
+    // SEND TO BACKEND ON SAVE
+    const text = document.querySelector('#text')
+    document.querySelector('#save').addEventListener('click', () => {
+        if (text.value.trim() !== "") {
+            // Send text to backend
+                fetch("/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        type: "text",
+                        text: text.value
+                    })
+                });
+                text.value = "" // Clear the form
+        }
+        else {
+            alert("Text required");
+    }})
+
+    // CHECK FOR TIMERS
+    function updateTimer(start){
+        const diffMs = new Date() - start;
+        const diffSec = Math.floor(diffMs/1000)
+        // console.log(diffSec)
+        return diffSec;
+    }
+
+    document.querySelectorAll('.sticky-note').forEach(note => {
+        const start = new Date(note.dataset.start)
+        const id = note.dataset.id
+        if (!start || start === "null") return; // Ignore if null or empty
+
+        // console.log(start)
+
+        const seconds = updateTimer(start);
+
+        // Create the element
+        const timer = document.createElement('p'); // create a p div for the timer
+        timer.classList.add('timer'); // add timer class
+        // Set the exact styles
+        timer.style.margin = "0 auto";
+        timer.style.textAlign = "center";
+        timer.style.width = "fit-content";
+        timer.textContent = seconds;
+        const stickyNote = document.querySelector(`.sticky-note[data-id="${id}"]`);
+        const btnContainer = stickyNote.querySelector(`.btn-container[data-id="${id}"]`);
+        stickyNote.insertBefore(timer, btnContainer);
+
+        setInterval(() => {
+            const seconds = updateTimer(start);
+            timer.textContent = seconds;
+        }, 1000); 
+    })
+
     // Delete Button
     const deleteButton = document.querySelectorAll('.delete-btn');
     deleteButton.forEach(button => {
@@ -39,23 +95,35 @@ document.addEventListener('DOMContentLoaded', () => {
         })})
 
     // Begin Button
-    const beginButton = document.querySelectorAll('.begin-btn');
-    beginButton.forEach(button => {
-        button.addEventListener('click', () => { 
-            const taskId = button.dataset.id; // Get the id from the button
-            // Send id to backend to be deleted
-            fetch("/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    type: "begin",
-                    id: taskId
-                })
-            });
-        })})
-});
+    document.body.addEventListener('click', (e) => {
+        if (e.target.classList.contains('begin-btn')) {
+        const button = event.target; // get button element
+        const taskId = button.dataset.id; // Get the id from the button
+        button.classList.remove('begin-btn'); // Remove the begin class
+        button.classList.add('complete-btn'); // add the started class
+        button.textContent = "Complete"; // Fill th text
+
+        // Send id to backend to be deleted
+        fetch("/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                type: "begin",
+                id: taskId
+            })
+        })
+        const btnContainer = document.querySelector(`.btn-container[data-id="${taskId}"]`);
+
+        const c = document.createElement('button') // Create a <button> element for completion
+        // c.classList.add('delete-btn'); // add the delete class
+        c.textContent = "Pause"; // Fill th text
+        btnContainer.appendChild(c) // append it to the container class
+        }
+    });
+
+})
 
 </script>
 
@@ -69,16 +137,27 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="task-container">
 
          {% for task in tasks %}
-         <div class="sticky-note" data-id="{{ task[0]}}">
-            <p>{{ task[1] or 'No description provided.' }}</p>
+         <div class="sticky-note" data-id="{{ task[0]}}" data-start="{{ task[2] }}">
+
+            <textarea>{{ task[1] or 'No description provided.' }}</textarea>
             
-            <div class="btn-container">
+            <!-- {% if task[2] %}
+                <p style="margin: 0 auto; text-align: center; width: fit-content;" data-start="{{ task[2] }}" class="timer">Timer</p>
+            {% endif %} -->
+                        
+            <div class="btn-container" data-id="{{ task[0]}}">
                 <button type="button" class="delete-btn" data-id="{{ task[0]}}">
                     <!-- <img src="static/trash.png" alt="Save" style="width: 30px; height: 30px;"> -->
                     🗑️
                 </button>
 
+                {% if not task[2] %}
                 <button type="button" class="begin-btn" data-id="{{ task[0]}}">Start</button>
+                {% else %}
+                <button type="button" class="complete-btn">Complete</button>
+                <button type="button" class="pause-btn" data-id="{{ task[0]}}">Pause</button>
+                {% endif %}
+
             </div>
 
         </div>
@@ -88,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="form-container sticky-note">
             <form>
-                <textarea id="text" name="text" placeholder="Type to add a note..." required></textarea>
+                <textarea id="text" name="text" placeholder="Type to add a task..." required></textarea>
             
                 <button type="button" id="save">Save</button>
             </form>

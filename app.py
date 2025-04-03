@@ -19,8 +19,12 @@ def home():
         port="5432"
     )
     cur = conn.cursor()
-    cur.execute("SELECT id, description FROM tasks ORDER BY id ASC")
+
+    # Get all tasks
+    cur.execute("SELECT id, description, start_time FROM tasks ORDER BY id ASC")
     tasks = cur.fetchall()
+
+    print(tasks)
 
     # when a POST is recieved 
     if request.method == "POST":
@@ -55,7 +59,7 @@ def home():
                 time = datetime.now()
                 cur.execute("UPDATE tasks SET start_time = %s WHERE id = %s", (time, id))
                 conn.commit()
-                # Emit the time
+                # Emit the started time with its id
                 socketio.emit("time", {
                     "id": id,
                     "time": time.isoformat()
