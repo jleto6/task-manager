@@ -24,7 +24,7 @@ def home():
     cur.execute("SELECT id, description, start_time FROM tasks ORDER BY id ASC")
     tasks = cur.fetchall()
 
-    print(tasks)
+    # print(tasks)
 
     # when a POST is recieved 
     if request.method == "POST":

@@ -10,7 +10,7 @@
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
 <!-- Dynamically Created Buttons -->
-<script type="module" src="{{ url_for('static', filename='main.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='dynamic.js') }}"></script>
 
 <!-- Static Buttons -->
 <script type="module" src="{{ url_for('static', filename='static.js') }}"></script>
@@ -29,10 +29,6 @@
 
             <textarea>{{ task[1] or 'No description provided.' }}</textarea>
             
-            <!-- {% if task[2] %}
-                <p style="margin: 0 auto; text-align: center; width: fit-content;" data-start="{{ task[2] }}" class="timer">Timer</p>
-            {% endif %} -->
-                        
             <div class="btn-container" data-id="{{ task[0]}}">
                 <button type="button" class="delete-btn" data-id="{{ task[0]}}">
                     <!-- <img src="static/trash.png" alt="Save" style="width: 30px; height: 30px;"> -->
@@ -51,8 +47,7 @@
         </div>
         {% endfor %}
          
-        <!-- Main container with form and tasks side by side -->
-
+        <!-- form container -->
         <div class="form-container sticky-note">
             <form>
                 <textarea id="text" name="text" placeholder="Type to add a task..." required></textarea>
