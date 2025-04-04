@@ -2,45 +2,57 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap');
 
 
-html, body {
+html {
     font-family: 'IBM Plex Mono', monospace;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background-color: #e3f2fd;
     color: #333;
-    margin: 0; /* Remove default margins */
-    padding: 0; /* Remove default padding */
+}
+
+body {
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
 h1 {
-    text-align: left;
+
+    text-align: center;
     color: #4a4a4a;
-    font-size: 2.5rem;
-    margin-bottom: 30px;
+    font-size: 3.5rem;
 }
 
-.sticky-note {
-    background-color: #FFEB80;
-    border-radius: 0px; 
-    width: 250px;
-    height: 250px; 
-    padding: 15px;
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1); 
-    margin-bottom: 20px;
-    font-size: 1rem;
-    justify-content: flex-start; /* Keep elements at the top */
-    align-items: stretch; /* Ensure children fill the container's width */
+/* .heading {
+    text-align: center;
+    margin-bottom: 30px;
+} */
 
-    display: flex; 
+.task-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 300px));
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .sticky-note {
+    background-color: #FFEB80;
+    border-radius: 0px;
+    height: 250px;
+    padding: 15px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+  
+    display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 0.5em 1em; /* top/bottom, left/right */
-
-}
+  
+    width: 100%; /* Let the grid control the width */
+    max-width: 250px; /* Optional: cap it if you like */
+  }
 
 textarea {
-    padding: 15px;
+    padding: 20px;
     font-size: 1rem;
     width: 100%;
     height: 218px;
@@ -65,7 +77,7 @@ textarea:focus {
 
 .btn-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;  /* <-- center the buttons */
     gap: 8px;
     margin-top: 12px;
   }
@@ -81,7 +93,7 @@ button {
     font-family: 'IBM Plex Mono', monospace;
     border: none;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1); 
-    border-radius: 10px;
+    border-radius: 7.5px;
     cursor: pointer;
     font-size: 1rem;
     padding: 3;
@@ -91,6 +103,13 @@ button {
 button:hover {
     background-color: lightgray; 
 }
+
+/* .glass-effect {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    padding: 10px;
+  } */
 
 .begin-btn {
     --color: rgba(80, 220, 100, 0.5); 
@@ -102,24 +121,15 @@ button:hover {
 
 .delete-btn {
     /* --color: rgba(255, 0, 0, 0.5);  */
-    margin-left: 8px;
+    margin-left: 2px;
   }
 
 
 .complete-btn {
     --color: rgba(80, 220, 100, 0.5); 
-    padding: 5px 20px; /* top/bottom and left/right padding */
+    padding: 5px 50px; /* top/bottom and left/right padding */
 
   }
 .complete-btn:hover {
     background-color: lightgreen;
-}
-
-.task-container {
-    justify-content: center; 
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 20px;
-    margin-top: 20px;
 }

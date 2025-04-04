@@ -7,10 +7,9 @@ app = Flask(__name__)
 app.secret_key = "dev"  # Set a secret key for session
 socketio = SocketIO(app)  # Initialize Socket.IO
 
-@app.route("/", methods=["GET", "POST"])
-def home():
-    
-    # On connect
+
+# On connect
+def get_db():
     conn = psycopg2.connect(
         dbname="tasksdb",
         user="postgres",
@@ -20,8 +19,15 @@ def home():
     )
     cur = conn.cursor()
 
+    return conn, cur
+
+@app.route("/", methods=["GET", "POST"])
+def home():
+
+    conn, cur = get_db()
+
     # Get all tasks
-    cur.execute("SELECT id, description, start_time FROM tasks ORDER BY id ASC")
+    cur.execute("SELECT id, description, start_time, completed_on FROM tasks ORDER BY id ASC")
     tasks = cur.fetchall()
 
     # print(tasks)
@@ -65,9 +71,30 @@ def home():
                     "time": time.isoformat()
                 })
 
+        elif action_type== "complete":
+            id = data.get("id")
+            desc = data.get("desc")
+            if id:
+                # Update the started column with current time
+                time = datetime.now()
+                cur.execute("UPDATE tasks SET completed_on = %s WHERE id = %s", (time, id))
+                cur.execute("UPDATE tasks SET description = %s WHERE id = %s", (desc, id))
+                conn.commit()
+
+
         return "", 204  # success, no content
 
     return render_template("tasks.html", tasks=tasks)
+
+@app.route("/history", methods=["GET", "POST"])
+def history():
+    conn, cur = get_db()
+
+    # Get all tasks
+    cur.execute("SELECT id, description, start_time, completed_on FROM tasks ORDER BY id ASC")
+    tasks = cur.fetchall()
+    
+    return render_template("history.html", tasks=tasks)
 
 if __name__ == "__main__":
     app.run(debug=True)

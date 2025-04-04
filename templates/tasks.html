@@ -1,31 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager</title>
-    <link rel="stylesheet" href="static/style.css">
-</head>
+{% extends "base.html" %}
 
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+{% block title %}Task{% endblock %}
 
-<!-- Dynamically Created Buttons -->
-<script type="module" src="{{ url_for('static', filename='dynamic.js') }}"></script>
+{% block content %}
 
-<!-- Static Buttons -->
-<script type="module" src="{{ url_for('static', filename='static.js') }}"></script>
+    <h1>Active Tasks</h1>
 
-<body>
+    <div class="btn-container">
+        <a href="{{ url_for('home') }}">
+            <button type="button" style="padding:10px">Active Tasks</button>
+        </a>
 
-    <!-- Task Manager Title -->
-    <h1>Task Manager</h1>
+        <a href="{{ url_for('history') }}">
+            <button type="button" style="padding:10px">Task History</button>
+        </a>
+    </div>
 
-
-    <!-- Dynamically Generated Sticky Notes (Tasks) -->
     <div class="task-container">
 
-         {% for task in tasks %}
-         <div class="sticky-note" data-id="{{ task[0]}}" data-start="{{ task[2] }}">
+            {% for task in tasks if task[3] is none %}
+            <div class="sticky-note" data-id="{{ task[0]}}" data-start="{{ task[2] }}">
 
             <textarea>{{ task[1] or 'No description provided.' }}</textarea>
             
@@ -36,29 +30,25 @@
                 </button>
 
                 {% if not task[2] %}
-                <button type="button" class="begin-btn" data-id="{{ task[0]}}">Start</button>
+                <button type="button" class="begin-btn" data-id="{{ task[0]}}" data-type="begin">Start</button>
                 {% else %}
-                <button type="button" class="complete-btn">Complete</button>
-                <button type="button" class="pause-btn" data-id="{{ task[0]}}">Pause</button>
+                <button type="button" class="complete-btn" data-id="{{ task[0]}}" data-type="complete">Complete</button>
+                <!-- <button type="button" class="pause-btn" data-id="{{ task[0]}}">Pause</button> -->
                 {% endif %}
-
             </div>
 
-        </div>
-        {% endfor %}
-         
-        <!-- form container -->
-        <div class="form-container sticky-note">
-            <form>
-                <textarea id="text" name="text" placeholder="Type to add a task..." required></textarea>
+            </div>
+            {% endfor %}
             
-                <button type="button" id="save">Save</button>
-            </form>
-        </div>
+            <!-- form container -->
+            <div class="form-container sticky-note">
+                <form>
+                    <textarea id="text" name="text" placeholder="Type to add a task..." required></textarea>
+                
+                    <button type="button" id="save">Save</button>
+                </form>
+            </div>
 
     </div>
 
-
-
-</body>
-</html>
+{% endblock %}

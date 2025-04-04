@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Task Manager{% endblock %}
+
+{% block content %}
+
+<h1>Task History</h1>
+
+<div class="btn-container">
+    <a href="{{ url_for('home') }}">
+        <button type="button" style="padding:10px">Active Tasks</button>
+    </a>
+
+    <a href="{{ url_for('history') }}">
+        <button type="button" style="padding:10px">Task History</button>
+    </a>
+</div>
+
+
+<div class="task-container">
+
+    {% for task in tasks if task[3] %}
+    <div class="sticky-note" data-id="{{ task[0]}}" data-start="{{ task[2] }}" data-end="{{ task[3] }}">
+
+       <textarea>{{ task[1] or 'No description provided.' }}</textarea>
+       
+       <div class="btn-container" data-id="{{ task[0]}}">
+           <button type="button" class="delete-btn" data-id="{{ task[0]}}">
+               <!-- <img src="static/trash.png" alt="Save" style="width: 30px; height: 30px;"> -->
+               🗑️
+           </button>
+       </div>
+
+   </div>
+   {% endfor %}
+</div>
+
+{% endblock %}
