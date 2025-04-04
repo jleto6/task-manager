@@ -93,7 +93,8 @@ def history():
     # Get all tasks
     cur.execute("SELECT id, description, start_time, completed_on FROM tasks ORDER BY id ASC")
     tasks = cur.fetchall()
-    
+    tasks = sorted(tasks, key=lambda x: x[3], reverse=True)
+
     return render_template("history.html", tasks=tasks)
 
 if __name__ == "__main__":
