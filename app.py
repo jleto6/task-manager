@@ -9,26 +9,27 @@ socketio = SocketIO(app)  # Initialize Socket.IO
 
 
 # On connect
-# def get_db():
-#     conn = psycopg2.connect(
-#         dbname="tasksdb",
-#         user="postgres",
-#         password="5238",  
-#         host="localhost",
-#         port="5432"
-#     )
-#     cur = conn.cursor()
 
-#     return conn, cur
+def get_db():
+    conn = psycopg2.connect(
+        dbname="tasksdb",
+        user="postgres",
+        password="5238",  
+        host="localhost",
+        port="5432"
+    )
+    cur = conn.cursor()
+
+    return conn, cur
 
 import os
 import psycopg2
 
-def get_db():
-    DATABASE_URL = os.environ.get("DATABASE_URL")
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-    return conn, cur
+# def get_db():
+#     DATABASE_URL = os.environ.get("DATABASE_URL")
+#     conn = psycopg2.connect(DATABASE_URL)
+#     cur = conn.cursor()
+#     return conn, cur
 
 @app.route("/", methods=["GET", "POST"])
 def home():
