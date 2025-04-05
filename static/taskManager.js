@@ -1,5 +1,4 @@
 import { createTimer } from './helpers.js';
-import { setTime } from './helpers.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -36,10 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create Timer only if there is a start time
         if (note.dataset.start !== "None" && !note.dataset.end) {
             createTimer(note);
-        }
-        // If there is a end date, show time to complete
-        else if (note.dataset.end) {
-            setTime(note.dataset.start, note.dataset.end, note)
         }
     })
 

@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         d.dataset.id = task.id // Store the associated task ID in a data attrbute
         d.classList.add('delete-btn'); // add the delete class
         d.textContent = "🗑️"; // Fill the text
-        btnContainer.appendChild(d  ) // append it to the container class
+        btnContainer.appendChild(d) // append it to the container class
 
         // Start button
         const s = document.createElement('button') // Create a <button> element for starting task

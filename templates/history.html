@@ -16,13 +16,39 @@
     </a>
 </div>
 
+<!-- <h2>Past Week: </h2> -->
 
+<h2>Today:</h2>
 <div class="task-container">
 
-    {% for task in tasks if task[3] %}
+    {% for task in day_tasks %}
     <div class="sticky-note" data-id="{{ task[0]}}" data-start="{{ task[2] }}" data-end="{{ task[3] }}">
 
        <textarea>{{ task[1] or 'No description provided.' }}</textarea>
+
+       <p>Completed On: {{ task[3] }}</p>
+       
+       <div class="btn-container" data-id="{{ task[0]}}">
+           <button type="button" class="delete-btn" data-id="{{ task[0]}}">
+               <!-- <img src="static/trash.png" alt="Save" style="width: 30px; height: 30px;"> -->
+               🗑️
+           </button>
+       </div>
+   </div>
+   {% endfor %}
+</div>
+   
+<!-- Older Tasks -->
+<h2>Older Tasks:</h2>
+
+<div class="task-container">
+
+   {% for task in old_tasks %}
+    <div class="sticky-note" data-id="{{ task[0]}}" data-start="{{ task[2] }}" data-end="{{ task[3] }}">
+
+       <textarea>{{ task[1] or 'No description provided.' }}</textarea>
+
+       <p>Completed On: {{ task[3] }}</p>
        
        <div class="btn-container" data-id="{{ task[0]}}">
            <button type="button" class="delete-btn" data-id="{{ task[0]}}">

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
 import psycopg2
-from datetime import datetime
+from datetime import datetime, timedelta, time
 
 app = Flask(__name__)
 app.secret_key = "dev"  # Set a secret key for session
@@ -93,9 +93,33 @@ def history():
     # Get all tasks
     cur.execute("SELECT id, description, start_time, completed_on FROM tasks ORDER BY id ASC")
     tasks = cur.fetchall()
-    tasks = sorted(tasks, key=lambda x: x[3], reverse=True)
 
-    return render_template("history.html", tasks=tasks)
+    week_ago = datetime.now() - timedelta(days=7)
+    day_ago = datetime.now() - timedelta(days=1)
+    start_of_today = datetime.combine(datetime.now(), time(6, 0))
+
+    print("----")
+    print(start_of_today)
+    print("----")
+
+    day_tasks = []
+    week_tasks = []
+    old_tasks = []
+
+    for task in tasks:
+        if task[3] is not None:
+            print(task)
+            if task[3] > start_of_today:
+                day_tasks.append(task)
+                
+            if task[3] < week_ago:
+                old_tasks.append(task)
+
+    # tasks_with_values = [task for task in tasks if task[3] is not None] # List of tasks w completion dates
+    # tasks_sorted = sorted(tasks_with_values, key=lambda x: x[3], reverse=True)
+
+
+    return render_template("history.html", day_tasks=day_tasks, old_tasks=old_tasks)
 
 if __name__ == "__main__":
     app.run(debug=True)

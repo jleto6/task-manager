@@ -1,5 +1,6 @@
 // Helper Functions
 
+// Continiously update the timer
 export function updateTimer(start){
     const diffMs = new Date() - start; // Calculate the difference 
     const seconds = Math.floor(diffMs/1000) // Convert from ms to seconds
@@ -10,8 +11,8 @@ export function updateTimer(start){
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`
 }
 
+// Create the timer element
 export function createTimer(note){
-
     const start = new Date(note.dataset.start)
     const id = note.dataset.id
     const seconds = updateTimer(start);
@@ -32,6 +33,7 @@ export function createTimer(note){
     }, 1000); 
 }
 
+// Set time taken to complete a task 
 export function setTime(start, end, note){
     start = new Date(start)
     end = new Date(end)
@@ -46,11 +48,12 @@ export function setTime(start, end, note){
     // Create the element
     const timer = document.createElement('p'); // create a p div for the timer
     timer.classList.add('timer'); // add timer class
+
     // Set the exact styles
     timer.style.margin = "0 auto";
     timer.style.textAlign = "center";
     timer.style.width = "fit-content";
-    timer.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    timer.textContent = `Time to Complete: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     const btnContainer = note.querySelector(`.btn-container[data-id="${id}"]`);
     note.insertBefore(timer, btnContainer);
 
