@@ -53,7 +53,7 @@ export function setTime(start, end, note){
     timer.style.margin = "0 auto";
     timer.style.textAlign = "center";
     timer.style.width = "fit-content";
-    timer.textContent = `Time to Complete: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    timer.textContent = `Duration: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     const btnContainer = note.querySelector(`.btn-container[data-id="${id}"]`);
     note.insertBefore(timer, btnContainer);
 

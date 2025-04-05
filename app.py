@@ -121,5 +121,8 @@ def history():
 
     return render_template("history.html", day_tasks=day_tasks, old_tasks=old_tasks)
 
+# if __name__ == "__main__":
+#     app.run(debug=True)
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, host="0.0.0.0", port=5000)
