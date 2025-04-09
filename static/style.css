@@ -84,6 +84,8 @@ textarea:focus {
     justify-content: center;  /* <-- center the buttons */
     gap: 8px;
     margin-top: 12px;
+    margin: 12px auto 0 auto;  /* top auto bottom auto */
+    width: fit-content;
   }
 
 button {
@@ -117,7 +119,7 @@ button:hover {
 
 .begin-btn {
     --color: rgba(80, 220, 100, 0.5); 
-    padding: 5px 60px; /* top/bottom and left/right padding */
+    padding: 5px 45px; /* top/bottom and left/right padding */
   }
 .begin-btn:hover {
     background-color: lightgreen;
@@ -125,7 +127,7 @@ button:hover {
 
 .delete-btn {
     /* --color: rgba(255, 0, 0, 0.5);  */
-    margin-left: 2px;
+    margin-left: -20px;
   }
 
 

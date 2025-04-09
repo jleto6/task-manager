@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // SEND TO BACKEND ON CLICK SAVE
     const text = document.querySelector('#text')
     const saveBtn = document.querySelector('#save');
-
     if (saveBtn){
         saveBtn.addEventListener('click', () => {
         
@@ -38,14 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 
+
     // CHECK FOR CLICKS
     document.body.addEventListener('click', (e) => {
 
         // clicked on begin
         if (e.target.dataset.type === 'begin') {
-
             // console.log("clicked on begin")
-
             const button = e.target.closest("button");
             const taskId = button.dataset.id; // Get the id from the button
             button.classList.remove('begin-btn'); // Remove the begin class
@@ -78,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (e.target.dataset.type === 'complete') {
 
             // console.log("clicked on complete")
-    
             const button = e.target.closest("button");
             const taskId = button.dataset.id; // Get the id from the button
     
@@ -109,6 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             
         }
+
+        // clicked delete
         else if (e.target.classList.contains('delete-btn')) {
             // console.log("clicked on delete button")
 
@@ -139,4 +138,48 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         }
     });
+
+    // CHECK FOR INPUT CHANGES
+    document.body.addEventListener('input', (e) => {
+        console.log(e.target)
+        console.log("Input Changed to: ", e.target.value, "On ID: ", e.target.dataset.id);
+
+        setTimeout(() => {
+            // code to run after the delay
+            const taskId = e.target.dataset.id // get the id
+
+            // find the task based on id
+            let stickyNote = null;
+            document.querySelectorAll('.sticky-note').forEach(el => {
+                if (el.dataset.id === taskId) {
+                    stickyNote = el;
+                }
+              })
+
+              let textarea = stickyNote.querySelector('textarea');
+              let content = textarea.value;
+
+              console.log(content)
+
+            // Send updated text to backend
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    type: "edit",
+                    desc: content,
+                    id: taskId
+                })
+            });
+
+        }, 1000); // 1000 milliseconds = 1 second
+    });
+
+
+    // document.querySelector('textarea').addEventListener('input', (e) => {
+    //     console.log("Input Changed to: ", e.target.value);
+    // });
+
 });

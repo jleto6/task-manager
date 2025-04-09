@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const p = document.createElement('textarea'); // Create a <textarea> element to hold the text
         p.textContent = task.description || "No description provided."; // Fill th text
+        p.dataset.id = task.id // Store the task ID in a data attrribute
         note.appendChild(p); // Nest p inside of the note div
 
         // BUTTONS
@@ -39,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Start button
         const s = document.createElement('button') // Create a <button> element for starting task
         s.classList.add('begin-btn'); // add the start class
-        s.textContent = "Start"; // Fill the text
+        s.textContent = "Track Task"; // Fill the text
         s.dataset.type = "begin"
         s.dataset.id = task.id
         btnContainer.appendChild(s); // append it to the container class

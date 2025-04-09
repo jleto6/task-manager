@@ -21,7 +21,7 @@
             {% for task in tasks if task[3] is none %}
             <div class="sticky-note" data-id="{{ task[0]}}" data-start="{{ task[2] }}">
 
-            <textarea>{{ task[1] or 'No description provided.' }}</textarea>
+            <textarea data-id="{{ task[0] }}" >{{ task[1] or 'No description provided.' }}</textarea>
             
             <div class="btn-container" data-id="{{ task[0]}}">
                 <button type="button" class="delete-btn" data-id="{{ task[0]}}">
@@ -30,7 +30,7 @@
                 </button>
 
                 {% if not task[2] %}
-                <button type="button" class="begin-btn" data-id="{{ task[0]}}" data-type="begin">Start</button>
+                <button type="button" class="begin-btn" data-id="{{ task[0]}}" data-type="begin">Track Task</button>
                 {% else %}
                 <button type="button" class="complete-btn" data-id="{{ task[0]}}" data-type="complete">Complete</button>
                 <!-- <button type="button" class="pause-btn" data-id="{{ task[0]}}">Pause</button> -->

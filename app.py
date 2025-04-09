@@ -68,6 +68,14 @@ def home():
                 cur.execute("DELETE FROM tasks WHERE id = %s", (id,))
                 conn.commit()
 
+        elif action_type == "edit":
+            id = data.get("id")
+            desc = data.get("desc")
+            if id:
+                # Update the description column with data.desc
+                cur.execute("UPDATE tasks SET description = %s WHERE id = %s", (desc, id))
+                conn.commit()
+
         elif action_type == "begin":
             id = data.get("id")
             if id:
@@ -120,11 +128,9 @@ def history():
         if task[3] is not None:
             print(task)
             if task[3] > start_of_today:
-                day_tasks.append(task)
-                
-            if task[3] < week_ago:
-                old_tasks.append(task)
-
+                day_tasks.insert(0, task)                
+            if task[3] < start_of_today:
+                old_tasks.insert(0, task)
     # tasks_with_values = [task for task in tasks if task[3] is not None] # List of tasks w completion dates
     # tasks_sorted = sorted(tasks_with_values, key=lambda x: x[3], reverse=True)
 
