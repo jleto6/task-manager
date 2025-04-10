@@ -92,9 +92,10 @@ def home():
         elif action_type== "complete":
             id = data.get("id")
             desc = data.get("desc")
+            time = data.get("time")
             if id:
+                print(time)
                 # Update the started column with current time
-                time = datetime.now()
                 cur.execute("UPDATE tasks SET completed_on = %s WHERE id = %s", (time, id))
                 cur.execute("UPDATE tasks SET description = %s WHERE id = %s", (desc, id))
                 conn.commit()

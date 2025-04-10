@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // CHECK FOR CLICKS
     document.body.addEventListener('click', (e) => {
 
-        // clicked on begin
+        // clicked on BEGIN
         if (e.target.dataset.type === 'begin') {
             // console.log("clicked on begin")
             const button = e.target.closest("button");
@@ -72,10 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // btnContainer.appendChild(c) // append it to the container class
         }
 
-        // clicked on complete
+        // clicked on COMPLETE
         else if (e.target.dataset.type === 'complete') {
 
-            // console.log("clicked on complete")
+            // get task info
             const button = e.target.closest("button");
             const taskId = button.dataset.id; // Get the id from the button
     
@@ -88,6 +88,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // const stickyNote = document.querySelector(`.sticky-note[data-id="${taskId}"]`); // get the current stickynote from id
             const desc = stickyNote.querySelector('textarea').value;
+
+            // if time set manually
+            // console.log(localStorage.getItem('saved'))
+            if (localStorage.getItem(`saved-${taskId}`) === 'true'){
+
+                const rawStart = stickyNote.dataset.start;
+                const startTime = new Date(rawStart.replace(' ', 'T'));
+
+                if (!confirm("Complete Task? set manual for test")) return;
+                stickyNote.remove()
+
+                const setTime = localStorage.getItem(`setTime-${taskId}`)
+                console.log(setTime)
+                        
+                const [hours, minutes, seconds] = setTime.split(':').map(Number);
+                const durationMs = ((hours * 60 + minutes) * 60 + seconds) * 1000;
+                const completedTime = new Date(startTime.getTime() + durationMs);
+
+                const completedStr = formatLocalTimestamp(completedTime); // "2025-04-10 01:32:53"
+
+                console.log(completedStr)
+
+                // Send data backend to be stored
+                fetch("/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        type: "complete",
+                        time: completedTime,
+                        id: taskId,
+                        desc: desc
+                    })
+                })
+
+                return;
+            }
+
+            // if timed timer
+            // console.log("clicked on complete")
     
             if (!confirm("Complete Task?")) return;
             stickyNote.remove()
@@ -100,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({
                     type: "complete",
+                    time: new Date(),
                     id: taskId,
                     desc: desc
                 })
@@ -107,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
         }
 
-        // clicked delete
+        // clicked on DELETE
         else if (e.target.classList.contains('delete-btn')) {
             // console.log("clicked on delete button")
 
@@ -141,8 +183,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // CHECK FOR INPUT CHANGES
     document.body.addEventListener('input', (e) => {
-        console.log(e.target)
-        console.log("Input Changed to: ", e.target.value, "On ID: ", e.target.dataset.id);
+        // console.log(e.target.tagName)
+
+        if (e.target.tagName === 'TEXTAREA') {
+
+        // console.log("Input Changed to: ", e.target.value, "On ID: ", e.target.dataset.id);
 
         setTimeout(() => {
             // code to run after the delay
@@ -159,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
               let textarea = stickyNote.querySelector('textarea');
               let content = textarea.value;
 
-              console.log(content)
+            //   console.log(content)
 
             // Send updated text to backend
             fetch("/", {
@@ -175,6 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         }, 1000); // 1000 milliseconds = 1 second
+        }
+
     });
 
 

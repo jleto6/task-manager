@@ -12,14 +12,15 @@ export function updateTimer(start){
 }
 
 
-
-
-
 // Create the timer element
 export function createTimer(note){
     const start = new Date(note.dataset.start)
     const id = note.dataset.id
-    const seconds = updateTimer(start);
+
+    let seconds
+    if (localStorage.getItem(`saved-${id}`) !== 'true'){
+        seconds = updateTimer(start);
+    }
 
     // Create the elements
     const container = document.createElement('div') // create a container
@@ -28,7 +29,14 @@ export function createTimer(note){
     const timer = document.createElement('p'); // create a p div for the timer
     timer.contentEditable = true;
     timer.classList.add('timer'); // add timer class
-    timer.textContent = seconds;
+
+    if (seconds){
+        timer.textContent = seconds;
+    }
+    else{
+        console.log(localStorage.getItem(`setTime-${id}`))
+        timer.textContent = (localStorage.getItem(`setTime-${id}`));
+    }
 
     const btnContainer = note.querySelector(`.btn-container[data-id="${id}"]`);
 
@@ -37,35 +45,50 @@ export function createTimer(note){
     note.insertBefore(container, btnContainer);
 
 
-    // // edit  timer
-    // const saveButton = document.createElement('p'); // create a p div for the edit button
-    //     saveButton.textContent = "💾";
-    //     saveButton.style.fontSize = "0.9em";
-    //     saveButton.title = "Edit time manually";
-    // let isEditingTimer = false;
-    // timer.addEventListener('focus', () => {
-    //     // isEditingTimer = true;
-    //     isEditingTimer = true;
-    //     container.append(saveButton)
+    // ALLOW EDITING TIME
+    const saveButton = document.createElement('button'); // create a p div for the edit button
+        saveButton.textContent = "💾";
+        saveButton.style.fontSize = "0.9em";
+        saveButton.title = "Edit time manually";
+        saveButton.tabIndex = 0;
+        saveButton.dataset.id = id
 
-    // });
+    let isEditingTimer = false;
+    timer.addEventListener('focus', () => {
+        // isEditingTimer = true;
+        isEditingTimer = true;
+        container.append(saveButton)
 
-    // timer.addEventListener('blur', () => {
-    //     setTimeout(() => {
-    //         if (document.activeElement !== saveButton) {
-    //             isEditingTimer = false;
-    //             container.removeChild(saveButton);
-    //         }
-    //     }, 10); // just enough time to catch the click
-    // });
+    });
 
+    // CHECK FOR CLICKS
+    document.body.addEventListener('click', (e) => {
+        // clicked on begin
+        if (e.target === saveButton) {
+            // console.log("clicked on save w current time: ", timer.textContent)
+            seconds = timer.textContent;
+            localStorage.setItem(`setTime-${id}`, seconds);
 
+            localStorage.setItem(`saved-${id}`, 'true');
+            }
+    });
+
+    // if not set time manually and not focused
+    timer.addEventListener('blur', () => {
+        setTimeout(() => {
+            if (document.activeElement !== saveButton) {
+                isEditingTimer = false;
+                container.removeChild(saveButton);
+            }
+        }, 10); // just enough time to catch the click
+    });
+    
+    // Increment counter if not editing or set manually
     setInterval(() => {
-
-        // if (!isEditingTimer){
-
-        timer.textContent = updateTimer(start);
-        // }
+        // console.log(localStorage.getItem('saved'))
+        if (!isEditingTimer && (localStorage.getItem(`saved-${id}`) !== 'true')){
+            timer.textContent = updateTimer(start);
+        }
     }, 1000); 
 
 
