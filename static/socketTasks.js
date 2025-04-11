@@ -4,7 +4,6 @@ var socket = io(); // Connect to Flask-SocketIO Server
 
 import { createTimer } from './timer.js';
 
-
 document.addEventListener('DOMContentLoaded', () => {
 
     // CREATE STICKY NOTES FROM EMIT

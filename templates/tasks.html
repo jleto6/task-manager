@@ -23,6 +23,16 @@
 
             <textarea data-id="{{ task[0] }}" >{{ task[1] or 'No description provided.' }}</textarea>
             
+            <p data-id="{{ task[0] }}" class="started" style="font-size: 12px; text-align: center; width: 100%;">
+                {% if task[2] %}
+                    Started On:
+                <span contenteditable="true" data-id="{{ task[0] }}" >
+                  {{ task[2].strftime("%I:%M %p") }}
+                </span>
+                {% endif %}
+            </p>
+            
+            
             <div class="btn-container" data-id="{{ task[0]}}">
                 <button type="button" class="delete-btn" data-id="{{ task[0]}}">
                     <!-- <img src="static/trash.png" alt="Save" style="width: 30px; height: 30px;"> -->

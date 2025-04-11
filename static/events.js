@@ -57,7 +57,7 @@ export function handleClick(e){
     }
 
 
-    // ======= CLICKED ON BEGIN =======
+    // ======= CLICKED ON COMPLETE =======
     else if (e.target.dataset.type === 'complete') {
         // get task info
         const button = e.target.closest("button");
@@ -107,13 +107,16 @@ export function handleClick(e){
                     desc: desc
                 })
             })
-
             return;
         }
 
-        // if timed timer
-        // console.log("clicked on complete")
+        // if normal timer
         if (!confirm("Complete Task?")) return;
+
+        // console.log(new Date())
+
+        const formattedDate = formatLocalTimestamp(new Date()); 
+
         stickyNote.remove()
 
         // Send data backend to be stored
@@ -124,7 +127,7 @@ export function handleClick(e){
             },
             body: JSON.stringify({
                 type: "complete",
-                time: new Date(),
+                time: formattedDate,
                 id: taskId,
                 desc: desc
             })
@@ -163,43 +166,66 @@ export function handleClick(e){
 
 // ======= Handle Input Changes =======
 export function handleInput(e){
+
+    // console.log("Input Change From:", e.target)
+
     // console.log(e.target.tagName)
 
     if (e.target.tagName === 'TEXTAREA') {
+        // console.log("Input Changed to: ", e.target.value, "On ID: ", e.target.dataset.id);
+        setTimeout(() => {
+            // code to run after the delay
+            const taskId = e.target.dataset.id // get the id
 
-    // console.log("Input Changed to: ", e.target.value, "On ID: ", e.target.dataset.id);
+            // find the task based on id
+            let stickyNote = null;
+            document.querySelectorAll('.sticky-note').forEach(el => {
+                if (el.dataset.id === taskId) {
+                    stickyNote = el;
+                }
+                })
 
-    setTimeout(() => {
-        // code to run after the delay
-        const taskId = e.target.dataset.id // get the id
+                let textarea = stickyNote.querySelector('textarea');
+                let content = textarea.value;
 
-        // find the task based on id
-        let stickyNote = null;
-        document.querySelectorAll('.sticky-note').forEach(el => {
-            if (el.dataset.id === taskId) {
-                stickyNote = el;
-            }
-            })
+            //   console.log(content)
 
-            let textarea = stickyNote.querySelector('textarea');
-            let content = textarea.value;
+            // Send updated text to backend
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    type: "editText",
+                    desc: content,
+                    id: taskId
+                })
+            });
 
-        //   console.log(content)
-
-        // Send updated text to backend
-        fetch("/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                type: "edit",
-                desc: content,
-                id: taskId
-            })
-        });
-
-    }, 1000); // 1000 milliseconds = 1 second
+        }, 1000); // 1000 milliseconds = 1 second
     }
+    
+    if (e.target.tagName === 'SPAN') {
+        console.log("Input Changed to: ", e.target.innerText, "On ID: ", e.target.dataset.id);
+
+        setTimeout(() => {
+
+            // Send updated text to backend
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    type: "editDate",
+                    date: e.target.innerText,
+                    id: e.target.dataset.id
+                })
+            });
+        }, 1000); // 1000 milliseconds = 1 second
+
+    }
+    
 
 }

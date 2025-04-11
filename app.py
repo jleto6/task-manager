@@ -68,13 +68,26 @@ def home():
                 cur.execute("DELETE FROM tasks WHERE id = %s", (id,))
                 conn.commit()
 
-        elif action_type == "edit":
+        elif action_type == "editText":
             id = data.get("id")
             desc = data.get("desc")
             if id:
                 # Update the description column with data.desc
                 cur.execute("UPDATE tasks SET description = %s WHERE id = %s", (desc, id))
                 conn.commit()
+
+        elif action_type == "editDate":
+            id = data.get("id")
+            date = data.get("date")
+            if id:
+                # WORK ON LOGIC TO REPLACE START TIME WITH EDITED
+                print("----")
+                print(tasks[3])
+                print("----")
+                # Update the description column with data.desc
+                # cur.execute("UPDATE tasks SET description = %s WHERE id = %s", (desc, id))
+                # conn.commit()
+                pass
 
         elif action_type == "begin":
             id = data.get("id")
@@ -95,7 +108,6 @@ def home():
             time = data.get("time")
             manual = data.get("manual")
             if id:
-                print(time)
                 # Update the started column with current time
                 cur.execute("UPDATE tasks SET completed_on = %s, description = %s, manually_set = %s WHERE id = %s", (time, desc, manual, id))
                 conn.commit()

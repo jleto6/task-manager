@@ -47,10 +47,12 @@ export function createTimer(note){
     }
 
     const btnContainer = note.querySelector(`.btn-container[data-id="${id}"]`);
+    const startedLabel = note.querySelector(`.started[data-id="${id}"]`);
+
 
     container.append(timer)
 
-    note.insertBefore(container, btnContainer);
+    note.insertBefore(container, startedLabel);
 
 
     // ALLOW EDITING TIME
