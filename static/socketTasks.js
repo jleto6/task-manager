@@ -2,7 +2,7 @@
 // @ts-nocheck
 var socket = io(); // Connect to Flask-SocketIO Server
 
-import { createTimer } from './helpers.js';
+import { createTimer } from './timer.js';
 
 
 document.addEventListener('DOMContentLoaded', () => {

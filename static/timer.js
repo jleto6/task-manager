@@ -1,6 +1,15 @@
-// Helper Functions
 
-// Continiously update the timer
+// ======= CHECK FOR TIMERS =======
+// Go through all notes other than the form and see if theyve been started
+document.querySelectorAll('.sticky-note:not(.form-container)').forEach(note => { 
+
+    // Create Timer only if there is a start time
+    if (note.dataset.start !== "None" && !note.dataset.end) {
+        createTimer(note);
+    }
+})
+
+// ======= UPDATE TIMER =======
 export function updateTimer(start){
     const diffMs = new Date() - start; // Calculate the difference 
     const seconds = Math.floor(diffMs/1000) // Convert from ms to seconds
@@ -11,8 +20,7 @@ export function updateTimer(start){
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`
 }
 
-
-// Create the timer element
+// ======= CREATE THE TIMER =======
 export function createTimer(note){
     const start = new Date(note.dataset.start)
     const id = note.dataset.id
@@ -94,7 +102,19 @@ export function createTimer(note){
 
 }
 
-// Set time taken to complete a task 
+// ======= FORMAT TIME FUNCTION =======
+export function formatLocalTimestamp(date) {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    const hh = String(date.getHours()).padStart(2, '0');
+    const mi = String(date.getMinutes()).padStart(2, '0');
+    const ss = String(date.getSeconds()).padStart(2, '0');
+  
+    return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
+  }
+
+// ======= SET TIME TAKEN =======
 export function setTime(start, end, note){
     start = new Date(start)
     end = new Date(end)

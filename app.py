@@ -93,11 +93,11 @@ def home():
             id = data.get("id")
             desc = data.get("desc")
             time = data.get("time")
+            manual = data.get("manual")
             if id:
                 print(time)
                 # Update the started column with current time
-                cur.execute("UPDATE tasks SET completed_on = %s WHERE id = %s", (time, id))
-                cur.execute("UPDATE tasks SET description = %s WHERE id = %s", (desc, id))
+                cur.execute("UPDATE tasks SET completed_on = %s, description = %s, manually_set = %s WHERE id = %s", (time, desc, manual, id))
                 conn.commit()
 
 
@@ -110,7 +110,7 @@ def history():
     conn, cur = get_db()
 
     # Get all tasks
-    cur.execute("SELECT id, description, start_time, completed_on FROM tasks ORDER BY id ASC")
+    cur.execute("SELECT id, description, start_time, completed_on, manually_set FROM tasks ORDER BY id ASC")
     tasks = cur.fetchall()
 
     week_ago = datetime.now() - timedelta(days=7)
@@ -138,8 +138,8 @@ def history():
 
     return render_template("history.html", day_tasks=day_tasks, old_tasks=old_tasks)
 
-# if __name__ == "__main__":
-#     app.run(debug=True)
-
 if __name__ == "__main__":
-    socketio.run(app, host="0.0.0.0", port=5000)
+    app.run(debug=True)
+
+# if __name__ == "__main__":
+#     socketio.run(app, host="0.0.0.0", port=5000)
