@@ -81,13 +81,15 @@ def home():
             date = data.get("date")
             if id:
                 # WORK ON LOGIC TO REPLACE START TIME WITH EDITED
-                print("----")
-                print(tasks[3])
-                print("----")
-                # Update the description column with data.desc
-                # cur.execute("UPDATE tasks SET description = %s WHERE id = %s", (desc, id))
-                # conn.commit()
-                pass
+                for task in tasks:
+                    if task[0] == int(id):
+                        # print(f"Current: {task[2]}")
+                        update_dt = datetime.strptime(date, "%m/%d/%y %I:%M %p")
+                        # print(f"Update: {update_dt}")
+
+                # Update the start time column with updated start time
+                cur.execute("UPDATE tasks SET start_time = %s WHERE id = %s", (update_dt, id))
+                conn.commit()
 
         elif action_type == "begin":
             id = data.get("id")

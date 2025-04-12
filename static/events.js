@@ -1,4 +1,4 @@
-import { formatLocalTimestamp } from './timer.js';
+import { formatLocalTimestamp, formatStrDate } from './timer.js';
 
 export function handleClick(e){
 
@@ -35,8 +35,33 @@ export function handleClick(e){
         button.dataset.type = 'complete'
         button.textContent = "Complete"; // Fill th text
 
-        console.log(taskId)
+        let stickyNote
+        document.querySelectorAll('.sticky-note').forEach(el => {
+            if (el.dataset.id === taskId) {
+                stickyNote = el;
+        }})
 
+
+        // STARTED TIME
+        const t = document.createElement('p'); // Create a <p> element to hold the text
+        t.dataset.id = taskId // Store the task ID in a data attrribute
+        t.classList.add("started")
+        t.textContent = "Started On: " // outer text
+
+        const startedDate = formatLocalTimestamp(new Date())
+
+        const span = document.createElement('span') // Create a span element to hold text
+        span.contentEditable = true;
+        span.dataset.id = taskId;
+        span.textContent = startedDate; // Fill th text
+
+        t.appendChild(span)
+        t.style = "font-size: 12px; text-align: center; width: 100%;"
+
+        const btnContainer = stickyNote.querySelector(`.btn-container[data-id='${taskId}']`);
+
+        stickyNote.insertBefore(t, btnContainer);
+        
         // Send id to backend to be begined
         fetch("/", {
             method: "POST",
@@ -48,7 +73,6 @@ export function handleClick(e){
                 id: taskId
             })
         })
-        const btnContainer = document.querySelector(`.btn-container[data-id="${taskId}"]`);
 
         // const c = document.createElement('button') // Create a <button> element for pause
         // // c.classList.add('delete-btn'); // add the delete class
@@ -68,22 +92,27 @@ export function handleClick(e){
                 stickyNote = el;
             }
         })
-
         // const stickyNote = document.querySelector(`.sticky-note[data-id="${taskId}"]`); // get the current stickynote from id
-        const desc = stickyNote.querySelector('textarea').value;
+        const desc = stickyNote.querySelector('textarea').value; // get description
 
-        // if time set manually
+        // IF TIME SET MANUALLY
         // console.log(localStorage.getItem('saved'))
         if (localStorage.getItem(`saved-${taskId}`) === 'true'){
 
             const rawStart = stickyNote.dataset.start;
+
+            console.log(rawStart)
+
             const startTime = new Date(rawStart.replace(' ', 'T'));
+
+            const setTime = localStorage.getItem(`setTime-${taskId}`)
+
+            console.log(setTime)
+
 
             if (!confirm("Complete Task? MANUALLY")) return;
             stickyNote.remove()
 
-            const setTime = localStorage.getItem(`setTime-${taskId}`)
-            console.log(setTime)
                     
             const [hours, minutes, seconds] = setTime.split(':').map(Number);
             const durationMs = ((hours * 60 + minutes) * 60 + seconds) * 1000;
@@ -110,7 +139,7 @@ export function handleClick(e){
             return;
         }
 
-        // if normal timer
+        // IF TIMED TASK
         if (!confirm("Complete Task?")) return;
 
         // console.log(new Date())
@@ -164,13 +193,13 @@ export function handleClick(e){
     }
 }
 
-// ======= Handle Input Changes =======
+// ======= HANDLE INPUT CHANGES =======
 export function handleInput(e){
 
     // console.log("Input Change From:", e.target)
-
     // console.log(e.target.tagName)
 
+    // For description changes
     if (e.target.tagName === 'TEXTAREA') {
         // console.log("Input Changed to: ", e.target.value, "On ID: ", e.target.dataset.id);
         setTimeout(() => {
@@ -206,10 +235,23 @@ export function handleInput(e){
         }, 1000); // 1000 milliseconds = 1 second
     }
     
+    // For date changes
     if (e.target.tagName === 'SPAN') {
         console.log("Input Changed to: ", e.target.innerText, "On ID: ", e.target.dataset.id);
 
         setTimeout(() => {
+
+            // find the task based on id
+            let stickyNote = null;
+            document.querySelectorAll('.sticky-note').forEach(el => {
+                if (el.dataset.id === e.target.dataset.id) {
+                    stickyNote = el;
+            }
+            })
+
+            const dateObject = (formatStrDate(e.target.innerText));
+            stickyNote.dataset.start = dateObject;
+            console.log(stickyNote.dataset.start)
 
             // Send updated text to backend
             fetch("/", {

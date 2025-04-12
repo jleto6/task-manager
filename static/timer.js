@@ -49,7 +49,6 @@ export function createTimer(note){
     const btnContainer = note.querySelector(`.btn-container[data-id="${id}"]`);
     const startedLabel = note.querySelector(`.started[data-id="${id}"]`);
 
-
     container.append(timer)
 
     note.insertBefore(container, startedLabel);
@@ -106,12 +105,39 @@ export function createTimer(note){
 
 // ======= FORMAT TIME FUNCTION =======
 export function formatLocalTimestamp(date) {
-    const yyyy = date.getFullYear();
+    const yy = String(date.getFullYear()).slice(-2);
     const mm = String(date.getMonth() + 1).padStart(2, '0');
     const dd = String(date.getDate()).padStart(2, '0');
-    const hh = String(date.getHours()).padStart(2, '0');
+  
+    let hours = date.getHours();
     const mi = String(date.getMinutes()).padStart(2, '0');
-    const ss = String(date.getSeconds()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+  
+    hours = hours % 12;
+    hours = hours ? hours : 12; // hour 0 should be 12
+    const hh = String(hours).padStart(2, '0');
+  
+    return `${mm}/${dd}/${yy} ${hh}:${mi} ${ampm}`;
+  }
+
+// ======= FORMAT STRDATE: "MM/DD/YY HH:MM AM/PM" → "YYYY-MM-DD HH:MM:SS" =======
+export function formatStrDate(str) {
+    const [datePart, timePart, meridiem] = str.split(' ');
+    const [month, day, yearShort] = datePart.split('/');
+    const [hourRaw, minute] = timePart.split(':');
+  
+    const year = String(parseInt(yearShort, 10) + 2000);
+    let hour = parseInt(hourRaw, 10);
+  
+    if (meridiem === 'PM' && hour !== 12) hour += 12;
+    if (meridiem === 'AM' && hour === 12) hour = 0;
+  
+    const yyyy = year;
+    const mm = month.padStart(2, '0');
+    const dd = day.padStart(2, '0');
+    const hh = String(hour).padStart(2, '0');
+    const mi = minute.padStart(2, '0');
+    const ss = '00';
   
     return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
   }

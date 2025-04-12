@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
         note.classList.add('sticky-note'); // add CSS class 'sticky-note' to it
         note.dataset.id = task.id; // Store the task ID in a data attribute
 
-        const p = document.createElement('textarea'); // Create a <textarea> element to hold the text
-        p.textContent = task.description || "No description provided."; // Fill th text
+        const p = document.createElement('textarea'); // Create a <textarea> element to hold the description
+        p.textContent = task.description || "No description provided."; // Fill the text
         p.dataset.id = task.id // Store the task ID in a data attrribute
-        note.appendChild(p); // Nest p inside of the note div
+        note.appendChild(p); // Nest desc inside of the note div
 
         // BUTTONS
         const btnContainer = document.createElement('div'); // Create the button container
@@ -46,7 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         note.appendChild(btnContainer) // append button container to the note
 
-        taskContainer.insertBefore(note, formContainer);  // Insert the new task before the formContainer
+        // Insert the new task before the formContainer
+        taskContainer.insertBefore(note, formContainer);  
     });
 
     // CREATE TIMER ON EMIT
