@@ -10,16 +10,23 @@ socketio = SocketIO(app, async_mode="eventlet")
 
 # On connect
 
-def get_db():
-    conn = psycopg2.connect(
-        dbname="tasksdb",
-        user="postgres",
-        password="5238",  
-        host="localhost",
-        port="5432"
-    )
-    cur = conn.cursor()
+# def get_db():
+#     conn = psycopg2.connect(
+#         dbname="tasksdb",
+#         user="postgres",
+#         password="5238",  
+#         host="localhost",
+#         port="5432"
+#     )
+#     cur = conn.cursor()
 
+#     return conn, cur
+
+
+def get_db():
+    DATABASE_URL = os.environ.get("DATABASE_URL")
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
     return conn, cur
 
 import os
