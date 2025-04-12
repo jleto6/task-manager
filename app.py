@@ -5,8 +5,8 @@ from datetime import datetime, timedelta, time
 
 app = Flask(__name__)
 app.secret_key = "dev"  # Set a secret key for session
-socketio = SocketIO(app)  # Initialize Socket.IO
-
+# socketio = SocketIO(app)  # Initialize Socket.IO
+socketio = SocketIO(app, async_mode="eventlet")
 
 # On connect
 
@@ -152,8 +152,10 @@ def history():
 
     return render_template("history.html", day_tasks=day_tasks, old_tasks=old_tasks)
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
+# Debug
 # if __name__ == "__main__":
-#     socketio.run(app, host="0.0.0.0", port=5000)
+#     app.run(debug=True)
+
+# Production
+if __name__ == "__main__":
+    socketio.run(app, host="0.0.0.0", port=5000)
