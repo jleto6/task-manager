@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
 import psycopg2
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta, time, timezone
 
 app = Flask(__name__)
 app.secret_key = "dev"  # Set a secret key for session
@@ -39,7 +39,7 @@ def get_db():
         )
     """)
     conn.commit()
-    
+
     return conn, cur
 
 import os
@@ -113,9 +113,9 @@ def home():
 
         elif action_type == "begin":
             id = data.get("id")
+            time = data.get("time")
             if id:
                 # Update the started column with current time
-                time = datetime.now()
                 cur.execute("UPDATE tasks SET start_time = %s WHERE id = %s", (time, id))
                 conn.commit()
                 # Emit the started time with its id

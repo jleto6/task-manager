@@ -70,6 +70,7 @@ export function handleClick(e){
             },
             body: JSON.stringify({
                 type: "begin",
+                time: startedDate,
                 id: taskId
             })
         })
