@@ -24,6 +24,7 @@ socketio = SocketIO(app)  # Initialize Socket.IO
 
 def get_db():
     DATABASE_URL = os.environ.get("DATABASE_PUBLIC_URL")
+    print("DATABASE_URL:", DATABASE_URL)  
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
     return conn, cur
