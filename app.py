@@ -27,6 +27,19 @@ def get_db():
     print("DATABASE_URL:", DATABASE_URL)  
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
+
+    # Create the table once if it doesn't exist
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS tasks (
+            id SERIAL PRIMARY KEY,
+            description TEXT NOT NULL,
+            start_time TIMESTAMP,
+            completed_on TIMESTAMP,
+            manually_set BOOLEAN DEFAULT FALSE
+        )
+    """)
+    conn.commit()
+    
     return conn, cur
 
 import os
