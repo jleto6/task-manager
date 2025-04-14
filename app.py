@@ -5,8 +5,8 @@ from datetime import datetime, timedelta, time
 
 app = Flask(__name__)
 app.secret_key = "dev"  # Set a secret key for session
-# socketio = SocketIO(app)  # Initialize Socket.IO
-socketio = SocketIO(app, async_mode="eventlet")
+socketio = SocketIO(app)  # Initialize Socket.IO
+# socketio = SocketIO(app, async_mode="eventlet")
 
 # On connect
 
@@ -22,10 +22,9 @@ socketio = SocketIO(app, async_mode="eventlet")
 
 #     return conn, cur
 
-
 def get_db():
-    DB_URL = os.environ.get("DATABASE_URL")
-    conn = psycopg2.connect(DB_URL)
+    DATABASE_URL = os.environ.get("DATABASE_URL")
+    conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
     return conn, cur
 
