@@ -14,7 +14,7 @@ socketio = SocketIO(app)  # Initialize Socket.IO
 #     conn = psycopg2.connect(
 #         dbname="tasksdb",
 #         user="postgres",
-#         password="5238",  
+#         password="",  
 #         host="localhost",
 #         port="5432"
 #     )
@@ -118,11 +118,6 @@ def home():
                 # Update the started column with current time
                 cur.execute("UPDATE tasks SET start_time = %s WHERE id = %s", (time, id))
                 conn.commit()
-                # Emit the started time with its id
-                socketio.emit("time", {
-                    "id": id,
-                    "time": time.isoformat()
-                })
 
         elif action_type== "complete":
             id = data.get("id")

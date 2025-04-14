@@ -61,6 +61,8 @@ export function handleClick(e){
         const btnContainer = stickyNote.querySelector(`.btn-container[data-id='${taskId}']`);
 
         stickyNote.insertBefore(t, btnContainer);
+
+        console.log(new Date())
         
         // Send id to backend to be begined
         fetch("/", {
@@ -70,7 +72,7 @@ export function handleClick(e){
             },
             body: JSON.stringify({
                 type: "begin",
-                time: startedDate,
+                time: (new Date().toLocaleString()),
                 id: taskId
             })
         })
